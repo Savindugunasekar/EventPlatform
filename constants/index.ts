@@ -1,3 +1,5 @@
+import { Ticket } from "@/lib/database/models/event.model"
+
 export const headerLinks = [
     {
       label: 'Home',
@@ -6,6 +8,7 @@ export const headerLinks = [
     {
       label: 'Create Event',
       route: '/events/create',
+      role:'org:admin'
     },
     {
       label: 'My Profile',
@@ -17,12 +20,11 @@ export const headerLinks = [
     title: '',
     description: '',
     location: '',
+    organizer:'',
     imageUrl: '',
     startDateTime: new Date(),
-    endDateTime: new Date(),
-    categoryId: '',
-    price: '',
-    isFree: false,
-    url: '',
+    
+    prices:[] as Ticket[]
+    
   }
   

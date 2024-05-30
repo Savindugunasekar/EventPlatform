@@ -1,0 +1,33 @@
+
+.backimage h1{
+    transition-duration: 500ms;
+   
+   
+    
+}
+
+
+
+.backimage:hover h1 {
+  transform: translateY(-50px);
+  
+   
+
+    
+  }
+
+
+.backimage .booking{
+
+transition-duration:500ms ;
+transform: translateY(100px);
+}
+
+
+.backimage:hover .booking{
+    
+    transform: translateY(-20px);
+    }
+
+
+  

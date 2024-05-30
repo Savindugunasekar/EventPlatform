@@ -1,4 +1,8 @@
+import '@fortawesome/fontawesome-svg-core/styles.css'
+import {config} from '@fortawesome/fontawesome-svg-core'
+config.autoAddCss=false;
 import type { Metadata } from "next";
+import { dark } from '@clerk/themes';
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -20,7 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider appearance={{
+      baseTheme: dark
+    }}>
       <html lang="en">
       <body className={poppins.variable}>{children}</body>
     </html>

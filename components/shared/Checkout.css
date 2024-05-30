@@ -1,0 +1,12 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    border-bottom: 2px solid #dddddd31;
+    padding:20px 15px;
+    text-align: center;
+  }
+  th {
+   color: #FFD700;
+  }

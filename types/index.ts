@@ -1,3 +1,5 @@
+import { Ticket } from "@/lib/database/models/event.model"
+
 // ====== USER PARAMS
 export type CreateUserParams = {
     clerkId: string
@@ -19,16 +21,15 @@ export type CreateUserParams = {
   export type CreateEventParams = {
     userId: string
     event: {
-      title: string
-      description: string
-      location: string
-      imageUrl: string
-      startDateTime: Date
-      endDateTime: Date
-      categoryId: string
-      price: string
-      isFree: boolean
-      url: string
+      title: string;
+  description?: string;
+  location?: string;
+  
+  organizer?: string;
+  imageUrl: string;
+  startDateTime: Date;
+  prices: Ticket[];
+
     }
     path: string
   }
@@ -42,11 +43,12 @@ export type CreateUserParams = {
       description: string
       location: string
       startDateTime: Date
-      endDateTime: Date
-      categoryId: string
-      price: string
-      isFree: boolean
-      url: string
+      organizer: string;
+      prices: Ticket[];
+      
+      
+     
+      
     }
     path: string
   }
@@ -58,7 +60,7 @@ export type CreateUserParams = {
   
   export type GetAllEventsParams = {
     query: string
-    category: string
+    
     limit: number
     page: number
   }
@@ -108,7 +110,7 @@ export type CreateUserParams = {
     eventTitle: string
     eventId: string
     price: string
-    isFree: boolean
+    
     buyerId: string
   }
   

@@ -8,14 +8,13 @@ import { Button } from '../ui/button'
 
 const Header = () => {
   return (
-    <header className='w-full border-b'>
+    <header className='w-full border-b border-[#ffd700] bg-[#0e0e0e]'>
 
-        <div className='wrapper flex items-center justify-between'>
+        <div className='wrapper  flex items-center justify-between'>
 
         <Link href={'/'} className='w-36'>
-                <Image 
-                src={'/assets/images/logo.svg'}
-                width={128} height={38} alt='evently logo'/>
+            <h1 className='h3-bold text-[#ffd700]'>SLEvents</h1>
+               
             </Link>
 
             <SignedIn>
@@ -33,7 +32,7 @@ const Header = () => {
                     
                 </SignedIn>
                 <SignedOut>
-                    <Button asChild className='rounded-full' size={'lg'}>
+                    <Button asChild className='rounded-full bg-[#ffd700] hover:bg-[#ffd700]/90' size={'lg'}>
                         <Link href={'/sign-in'}>
                             Login
                         </Link>
