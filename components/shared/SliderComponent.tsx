@@ -1,13 +1,17 @@
 "use client";
 import { IEvent } from "@/lib/database/models/event.model";
 import React, { useEffect, useState } from "react";
-import Countdownbooking from "./Countdownbooking";
+
 import Countdown from "./Countdown";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import './Slider.css'
 
-const SliderComponent = ({ currentEvent }: IEvent) => {
+interface SliderComponentProps {
+  currentEvent: IEvent;
+}
+
+const SliderComponent = ({ currentEvent }: SliderComponentProps) => {
   const [slideIn, setSlideIn] = useState(false);
 
   useEffect(() => {
