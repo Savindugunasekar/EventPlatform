@@ -5,6 +5,8 @@ import { Button } from '../ui/button';
 
 import { loadStripe } from '@stripe/stripe-js';
 import { checkoutOrder } from '@/lib/actions/order.actions';
+import { boughtTicket } from '@/app/(root)/events/[id]/page';
+import { changeTickets } from '@/lib/actions/event.actions';
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -12,7 +14,7 @@ loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
-const StripeForm = ({event,userId,totalAmount}:{event:IEvent,userId:string,totalAmount:string}) => {
+const StripeForm = ({event,userId,totalAmount,purchasedTickets}:{event:IEvent,userId:string,totalAmount:string,purchasedTickets:boughtTicket[]}) => {
 
     useEffect(() => {
         // Check to see if this is a redirect back from Checkout
@@ -43,6 +45,8 @@ const StripeForm = ({event,userId,totalAmount}:{event:IEvent,userId:string,total
         }
 
         await checkoutOrder(order)
+
+        await changeTickets({event,purchasedTickets})
         
 
     }

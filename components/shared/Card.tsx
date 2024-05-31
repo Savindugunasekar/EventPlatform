@@ -6,6 +6,7 @@ import "./Show.css";
 import Image from "next/image";
 import DeleteConfirmation from "./DeleteConfirmation";
 
+
 type CardProps = {
   event: IEvent;
   hasOrderLink?: boolean;
@@ -13,6 +14,12 @@ type CardProps = {
 };
 
 const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
+
+
+  
+
+// Function to handle clicking on the "Book Now" button
+
   const { sessionClaims } = auth();
 
   const userId = sessionClaims?.userId as string;
@@ -62,7 +69,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
        </h1>
        <div className="booking absolute bottom-4 left-5 ">
 
-        <Link href={`/events/${event._id}/#ticketsection`} className="group relative inline-block overflow-hidden  border-2 rounded-lg border-[#FFD700] px-8 py-3 focus:outline-none focus:ring">
+        <Link href={`/events/${event._id}/#checking`} className="group relative inline-block overflow-hidden  border-2 rounded-lg border-[#FFD700] px-8 py-3 focus:outline-none focus:ring">
        
            
            

@@ -1,4 +1,5 @@
 'use client';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAward, faCalendar, faLocationDot, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import React, { useState, useEffect } from 'react';
@@ -13,32 +14,27 @@ import { IEvent, Ticket } from '@/lib/database/models/event.model';
 import { useUser } from '@clerk/nextjs';
 import StripeForm from '@/components/shared/StripeForm';
 
-
+export interface boughtTicket {
+  ticketType: String;
+  purchasedNumber: number;
+}
 
 const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
   const [event, setEvent] = useState<IEvent | null>(null);
-
-  const {user} = useUser()
-  const userId = user?.publicMetadata.userId as string 
-  // const hasEventFinished = (event: { startDateTime: string } | null): boolean => {
-  //   if (event) {
-  //     return new Date(event.startDateTime) < new Date();
-  //   }
-  //   return false; // or handle the null case appropriately
-  // };
-
-
-
-
+  const { user } = useUser();
+  const userId = user?.publicMetadata.userId as string;
 
   const [numTickets, setNumTickets] = useState<{ [key: string]: number }>({});
   const [totalAmount, setTotalAmount] = useState<string>('0.00');
+  const [purchasedTickets, setPurchasedTickets] = useState<boughtTicket[]>([]);
+  const [remainingTickets, setRemainingTickets] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
     const fetchEvent = async () => {
       const event = await getEventById(id);
       setEvent(event);
       setNumTickets(Object.fromEntries(event.prices.map((ticket: Ticket) => [ticket.ticketCategory, 0])));
+      setRemainingTickets(Object.fromEntries(event.prices.map((ticket: Ticket) => [ticket.ticketCategory, ticket.amount])));
     };
     fetchEvent();
   }, [id]);
@@ -56,6 +52,10 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
       ...prevState,
       [ticketCategory]: prevState[ticketCategory] + 1,
     }));
+    setRemainingTickets((prevState) => ({
+      ...prevState,
+      [ticketCategory]: prevState[ticketCategory] - 1,
+    }));
   };
 
   const removeTicket = (ticketCategory: string) => {
@@ -64,19 +64,33 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
         ...prevState,
         [ticketCategory]: prevState[ticketCategory] - 1,
       }));
+      setRemainingTickets((prevState) => ({
+        ...prevState,
+        [ticketCategory]: prevState[ticketCategory] + 1,
+      }));
     }
   };
 
   const calculateTotalAmount = () => {
     let totalAmount = 0;
+    const updatedPurchasedTickets: boughtTicket[] = [];
+
     event.prices.forEach((ticket) => {
-      totalAmount += parseFloat(ticket.price) * numTickets[ticket.ticketCategory];
+      const ticketAmount = parseFloat(ticket.price) * numTickets[ticket.ticketCategory];
+      totalAmount += ticketAmount;
+
+      if (numTickets[ticket.ticketCategory] > 0) {
+        updatedPurchasedTickets.push({
+          ticketType: ticket.ticketCategory,
+          purchasedNumber: numTickets[ticket.ticketCategory],
+        });
+      }
     });
 
-    console.log(totalAmount.toString());
+    setTotalAmount(totalAmount.toFixed(2));
+    setPurchasedTickets(updatedPurchasedTickets);
+    console.log(`purchased tickets are ${purchasedTickets}`);
     
-
-    setTotalAmount(totalAmount.toString());
   };
 
   const generateTableRows = () => {
@@ -93,6 +107,7 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
             <FontAwesomeIcon onClick={() => removeTicket(ticket.ticketCategory)} icon={faMinus} />
           </span>
         </td>
+        <td>{remainingTickets[ticket.ticketCategory]}</td>
         <td>{(parseFloat(ticket.price) * numTickets[ticket.ticketCategory]).toFixed(2)} LKR</td>
       </tr>
     ));
@@ -130,8 +145,6 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
                 <p>Organized by {event.organizer}</p>
               </div>
             </div>
-
-          
           </div>
         </div>
 
@@ -143,7 +156,7 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
             </div>
           </div>
 
-          <div id="ticketsection" className="mt-[150px]">
+          <div id="checking" className="mt-[150px]">
             <h2 className="h3-bold text-center">Book your tickets..</h2>
             <div className="container bg-[#1a1a1a] h-[100vh] flex justify-center items-center">
               <div className="checkout bg-[#262626] w-[80%] rounded-xl flex shadow-2xl">
@@ -154,6 +167,7 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
                         <th>Category</th>
                         <th>Price</th>
                         <th>No. of Tickets</th>
+                        <th>Remaining Tickets</th>
                         <th>Amount</th>
                       </tr>
                     </thead>
@@ -163,12 +177,13 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
                         <td className="font-bold">Total</td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td className="font-bold">{totalAmount} LKR</td>
                       </tr>
                     </tbody>
                   </table>
                   <div>
-                  <StripeForm event={event} userId={userId} totalAmount={totalAmount} />
+                    <StripeForm event={event} userId={userId} totalAmount={totalAmount} purchasedTickets={purchasedTickets} />
                   </div>
                 </div>
               </div>

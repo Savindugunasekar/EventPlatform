@@ -1,15 +1,35 @@
 'use server'
 import { CreateEventParams,DeleteEventParams,GetAllEventsParams, UpdateEventParams,GetEventsByUserParams, GetOrdersByUserParams, GetOrdersByEventParams } from "@/types";
 import { connectToDatabase } from "../database";
-import Event from "../database/models/event.model";
+import Event, { IEvent, Ticket } from "../database/models/event.model";
 import User from "../database/models/user.model";
 import { handleError } from "../utils";
 import { revalidatePath } from "next/cache";
 import { ObjectId } from "mongodb";
 import Order from "../database/models/order.model";
+import { boughtTicket } from "@/app/(root)/events/[id]/page";
 
 
 
+export const changeTickets = async ({ event, purchasedTickets }: { event: IEvent, purchasedTickets: boughtTicket[] }) => {
+  await connectToDatabase();
+
+  const selectedEvent = await Event.findById(event._id);
+
+  if (!selectedEvent) {
+    throw new Error('Event not found');
+  }
+
+  purchasedTickets.forEach(purchasedTicket => {
+    const ticketIndex = selectedEvent.prices.findIndex((ticket: Ticket) => ticket.ticketCategory === purchasedTicket.ticketType);
+    if (ticketIndex !== -1) {
+      const currentAmount = parseInt(selectedEvent.prices[ticketIndex].amount as string, 10);
+      selectedEvent.prices[ticketIndex].amount = (currentAmount - purchasedTicket.purchasedNumber).toString();
+    }
+  });
+
+  await selectedEvent.save();
+};
 
 export const createEvent = async ({event,userId,path}:CreateEventParams) =>{
     try{

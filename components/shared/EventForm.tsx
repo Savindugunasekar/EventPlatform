@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+'use client'
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -28,13 +28,11 @@ import { useRouter } from "next/navigation";
 import { createEvent, updateEvent } from "@/lib/actions/event.actions";
 import { IEvent, Ticket } from "@/lib/database/models/event.model";
 
-
-
 type EventFormProps = {
   userId: string;
   type: "Create" | "Update";
-  event?:IEvent
-  eventId?:string
+  event?: IEvent;
+  eventId?: string;
 };
 
 interface Formdata {
@@ -46,20 +44,16 @@ interface Formdata {
   startDateTime: Date;
 }
 
-interface IxEvent {
-  title: string;
-  description?: string;
-  location?: string;
-  organizer?: string;
-  imageUrl: string;
-  startDateTime: Date;
-  prices: Ticket[];
-}
-
-const EventForm = ({ userId, type ,event,eventId }: EventFormProps) => {
+const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   const [tickets, setTickets] = useState<Ticket[]>([
     { ticketCategory: "", price: "", amount: "" },
   ]);
+
+  useEffect(() => {
+    if (type === 'Update' && event) {
+      setTickets(event.prices);
+    }
+  }, [type, event]);
 
   const handleClick = () => {
     setTickets([...tickets, { ticketCategory: "", price: "", amount: "" }]);
@@ -86,19 +80,17 @@ const EventForm = ({ userId, type ,event,eventId }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
   const [formData, setFormData] = useState<Formdata>({} as Formdata);
 
-  const initialValues = event && type==='Update'?{
-    ...event,startDateTime:new Date(event.startDateTime)
-  }: eventDefaultValues;
+  const initialValues = event && type === 'Update' ? {
+    ...event, startDateTime: new Date(event.startDateTime)
+  } : eventDefaultValues;
   const router = useRouter();
   const { startUpload } = useUploadThing("imageUploader");
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: initialValues,
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
     let uploadedImageUrl = values.imageUrl;
 
@@ -118,19 +110,17 @@ const EventForm = ({ userId, type ,event,eventId }: EventFormProps) => {
   const submitAll = async () => {
     const eventData = { ...formData, prices: tickets };
     console.log(eventData);
-    
 
-    if(type==='Create'){
-
+    if (type === 'Create') {
       try {
         const newEvent = await createEvent({
           event: eventData,
           userId,
           path: "/profile",
         });
-  
+
         console.log(eventData);
-  
+
         if (newEvent) {
           form.reset();
           router.push(`/events/${newEvent._id}`);
@@ -140,50 +130,35 @@ const EventForm = ({ userId, type ,event,eventId }: EventFormProps) => {
       }
     };
 
-    if(type==='Update'){
-      if(!eventId){
-        router.back()
-        return
+    if (type === 'Update') {
+      if (!eventId) {
+        router.back();
+        return;
       }
 
-      try{
-
-        const updatedEvent= await updateEvent({
+      try {
+        const updatedEvent = await updateEvent({
           userId,
-          event:{...eventData,_id:eventId},
-          path:`/events/${eventId}`
-        })
+          event: { ...eventData, _id: eventId },
+          path: `/events/${eventId}`
+        });
 
         console.log(`updated event is ${updatedEvent}`);
-        
 
-        if (updatedEvent){
+        if (updatedEvent) {
           form.reset();
-          router.push(`/events/${updatedEvent._id}`)
+          router.push(`/events/${updatedEvent._id}`);
         }
 
-      }catch(error){
+      } catch (error) {
         console.log(error);
-        
       }
     }
+  }
 
-
-
-
-    
-  
-
-    }
-    
-    
-   
-    
-
-    
   return (
     <>
-      <Form  {...form}>
+      <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-5 bg-[#0e0e0e]"
@@ -196,7 +171,6 @@ const EventForm = ({ userId, type ,event,eventId }: EventFormProps) => {
                 <FormItem className="w-full">
                   <FormControl>
                     <Input
-                    
                       placeholder="Event title"
                       {...field}
                       className="input-field text-white"
@@ -267,7 +241,6 @@ const EventForm = ({ userId, type ,event,eventId }: EventFormProps) => {
                 <FormItem className="w-full">
                   <FormControl>
                     <div className="flex-center h-[54px] w-full overflow-hidden rounded-full bg-[#333] py-2">
-                      
                       <Input
                         placeholder="Event location or Online :"
                         {...field}
@@ -289,7 +262,6 @@ const EventForm = ({ userId, type ,event,eventId }: EventFormProps) => {
                 <FormItem className="w-full">
                   <FormControl>
                     <div className="flex-center h-[54px] w-full overflow-hidden rounded-full bg-[#333]  py-2">
-                      
                       <p className="ml-3 whitespace-nowrap text-white">
                         Start Date:
                       </p>
@@ -312,13 +284,9 @@ const EventForm = ({ userId, type ,event,eventId }: EventFormProps) => {
           <Button
             type="submit"
             className="w-[200px] rounded-full"
-           
             disabled={form.formState.isSubmitting}
-           
           >
-            {form.formState.isSubmitting
-              ? "Uploading..."
-              : `Upload info`}
+            {form.formState.isSubmitting ? "Uploading..." : `Upload info`}
           </Button>
         </form>
       </Form>
@@ -328,56 +296,46 @@ const EventForm = ({ userId, type ,event,eventId }: EventFormProps) => {
         <Button className="rounded-full p-5" onClick={handleClick}>Add</Button>
         <form onSubmit={submitTickets}>
           {tickets.map((val, i) => (
-            <div className="flex flex-col gap-5 md:flex-row my-3 items-center" key={i} >
-              
-                <input
-                className="input-field w-full"
-                placeholder="ticketCategory"
-                  name="ticketCategory"
-                  value={val.ticketCategory}
-                  onChange={(e) => handleChange(e, i)}
-                />
-             
-              
-                <input
-                placeholder="Price"
-                className="input-field w-full"
-                  type="number"
-                  name="price"
-                  value={val.price}
-                  onChange={(e) => handleChange(e, i)}
-                />
-              
-              
-                
-                <input
-                placeholder="Amount"
-                  type="number"
-                  name="amount"
-                  className="input-field w-full"
-
-                  value={val.amount}
-                  onChange={(e) => handleChange(e, i)}
-                />
-              
-              <Button className="rounded-full p-5" type="button" onClick={() => handleDelete(i)}>
-                Delete
-              </Button>
-            </div>
-          ))}
-         
-        </form>
-        
-      </section>
-
-      <section className="mt-[50px]" >
-        <Button className=" button col-span-2 w-full" onClick={submitAll}>Create event</Button>
-
-      
-        
-      </section>
-    </>
-  );
-};
-
-export default EventForm;
+                 <div className="flex flex-col gap-5 md:flex-row my-3 items-center" key={i}>
+                 <input
+                   className="input-field w-full text-white"
+                   placeholder="Ticket Category"
+                   name="ticketCategory"
+                   value={val.ticketCategory}
+                   onChange={(e) => handleChange(e, i)}
+                 />
+                 <input
+                   placeholder="Price"
+                   className="input-field w-full text-white"
+                   type="number"
+                   name="price"
+                   value={val.price}
+                   onChange={(e) => handleChange(e, i)}
+                 />
+                 <input
+                   placeholder="Amount"
+                   type="number"
+                   name="amount"
+                   className="input-field w-full text-white"
+                   value={val.amount}
+                   onChange={(e) => handleChange(e, i)}
+                 />
+                 <Button className="rounded-full p-5" type="button" onClick={() => handleDelete(i)}>
+                   Delete
+                 </Button>
+               </div>
+             ))}
+             </form>
+           </section>
+     
+           <section className="mt-[50px]">
+             <Button className="button col-span-2 w-full" onClick={submitAll}>
+               {type === 'Create' ? 'Create Event' : 'Update Event'}
+             </Button>
+           </section>
+         </>
+       );
+     };
+     
+     export default EventForm;
+     
