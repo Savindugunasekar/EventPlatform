@@ -1,17 +1,29 @@
 import Collection from '@/components/shared/Collection'
 import { Button } from '@/components/ui/button'
-import { getEventsByUser } from '@/lib/actions/event.actions'
+import { getEventsByUser, getOrdersByUser } from '@/lib/actions/event.actions'
+import { IOrder } from '@/lib/database/models/order.model'
+import { SearchParamProps } from '@/types'
 import { auth } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import React from 'react'
 
-const ProfilePage =async () => {
+const ProfilePage =async ({searchParams}:SearchParamProps) => {
 
     const {sessionClaims} = auth();
 
     const userId= sessionClaims?.userId as string
 
-    const organizedEvents = await getEventsByUser({userId,page:1})
+    const ordersPage = Number(searchParams?.ordersPage) ||1
+
+    const eventsPage = Number(searchParams?.eventsPage) ||1
+
+
+    const organizedEvents = await getEventsByUser({userId,page:eventsPage})
+
+    const orders = await getOrdersByUser({userId,page:ordersPage})
+
+    const orderedEvents = orders?.data.map((order: IOrder) => order.event) || [];
+
 
   return (
     <>
@@ -26,6 +38,20 @@ const ProfilePage =async () => {
             <Link href="/#events">Explore More Events</Link>
           </Button>
         </div>
+      </section>
+
+
+      <section className="wrapper my-8">
+        <Collection
+          data={orderedEvents}
+          emptyTitle="No event tickets purchased yet "
+          emptyStateSubtext="Plenty of exciting events to explore!"
+          collectionType="My_Tickets"
+          limit={3}
+          page={ordersPage}
+          totalPages={orders?.totalPages}
+          urlParamName="ordersPage"
+        />
       </section>
 
     {/* events organized */}
@@ -47,8 +73,8 @@ const ProfilePage =async () => {
           emptyStateSubtext="Go create some now"
           collectionType='Events_Organized'
           limit={3}
-          page={1}
-          totalPages={2}
+          page={eventsPage}
+          totalPages={organizedEvents?.totalPages}
           urlParamName="eventsPage"
         />
       </section>
