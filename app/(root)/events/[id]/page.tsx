@@ -131,7 +131,7 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
               </div>
             </div>
 
-           <StripeForm event={event} userId={userId} totalAmount={totalAmount} />
+          
           </div>
         </div>
 
@@ -168,15 +168,7 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
                     </tbody>
                   </table>
                   <div>
-                    <a
-                      className="group relative inline-block overflow-hidden border border-2 rounded-lg border-[#FFD700] px-20 py-4 mt-10 focus:outline-none focus:ring"
-                      href="#"
-                    >
-                      <span className="absolute inset-y-0 left-0 w-[2px] bg-[#FFD700] transition-all group-hover:w-full"></span>
-                      <span className="relative text-2xl font-medium text-[#FFD700] transition-colors group-hover:text-black">
-                        Checkout
-                      </span>
-                    </a>
+                  <StripeForm event={event} userId={userId} totalAmount={totalAmount} />
                   </div>
                 </div>
               </div>

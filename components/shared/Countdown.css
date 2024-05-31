@@ -1,0 +1,23 @@
+*{
+    color: white;
+}
+
+section{
+    
+    padding: 10px;
+    margin: 0 10px;
+    width: 80px;
+  
+   border-radius: 20px;
+   box-shadow: 0 0 5px  rgb(56, 56, 56);
+    
+}
+
+section .value{
+    padding-left: 15px;
+    font-size: 30px;
+}
+
+section .label{
+    color: #FFD700;
+}

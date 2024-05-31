@@ -1,4 +1,5 @@
 import Collection from "@/components/shared/Collection";
+import ImageSlider from "@/components/shared/ImageSlider";
 import Search from "@/components/shared/Search";
 import { getAllEvents } from "@/lib/actions/event.actions";
 import { SearchParamProps } from "@/types";
@@ -22,6 +23,8 @@ export default async function Home({searchParams}:SearchParamProps) {
     
 
     <>
+
+    <ImageSlider/>
 
     <section className="wrapper my-8 flex flex-col gap-8 md:gap-12">
 

@@ -51,6 +51,26 @@ export const getEventById =async (eventId:string)=>{
     }
 }
 
+export const getSlides = async ()=>{
+  try{
+
+    await connectToDatabase();
+
+    const events = await Event.find()
+    .sort({createdAt:'desc'})
+        
+        .limit(10)
+
+
+        return JSON.parse(JSON.stringify(events))
+    
+
+  }catch(error){
+    handleError(error)
+  }
+
+}
+
 export const getAllEvents = async ({query,limit=6,page}:GetAllEventsParams)=>{
     try{
 
