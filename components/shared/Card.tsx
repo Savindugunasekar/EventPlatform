@@ -36,6 +36,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
          className="  rounded-lg w-full object-cover h-full hover:scale-110 duration-500"
          src={event.imageUrl}
          alt=""
+         style={{filter: 'brightness(70%)'}}
        />
        </Link>
        

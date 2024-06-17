@@ -58,13 +58,21 @@ const ImageSlider = () => {
     const currentEvent = events.length > 0 ? events[currIndex] : null;
 
     return (
-        <div className='w-full h-[70vh] relative group'>
-            {currentEvent && <SliderComponent currentEvent={currentEvent} />}
+        <div className=' h-[80vh] relative group'>
+            {currentEvent && <SliderComponent currentEvent={currentEvent}  />}
 
 
-            <FontAwesomeIcon icon={faChevronLeft} className='text-white' onClick={prevSlide}/>
+            <FontAwesomeIcon 
+                icon={faChevronLeft} 
+                className='text-2xl hidden group-hover:block absolute top-[50%] left-4 transform -translate-y-1/2 text-[#FFD700] cursor-pointer' 
+                onClick={prevSlide}
+            />
 
-            <FontAwesomeIcon icon={faChevronRight} className='text-white' onClick={nextSlide}/>
+            <FontAwesomeIcon 
+                icon={faChevronRight} 
+                className='text-2xl hidden group-hover:block absolute top-[50%] right-4 transform -translate-y-1/2 text-[#FFD700] cursor-pointer' 
+                onClick={nextSlide}
+            />
 
             
         </div>

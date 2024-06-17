@@ -44,7 +44,7 @@ const Countdownbooking: React.FC<CountdownProps> = ({ isoDateString }) => {
   }, [isoDateString]);
 
   return (
-    <div className="flex">
+    <div className="flex ">
       <section>
         <p className="label">days</p>
         <p className="value">{days}</p>

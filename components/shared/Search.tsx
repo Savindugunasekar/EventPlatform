@@ -46,7 +46,7 @@ const Search = ({placeholder ='Search title...'}:{placeholder?:string}) => {
 
 
   return (
-    <div className="flex-center min-h-[54px] w-full overflow-hidden rounded-full bg-[#333] px-4 py-2">
+    <div className="flex-center min-h-[54px] max-w-[600px] overflow-hidden rounded-full bg-[#333] px-4 py-2">
       <FontAwesomeIcon icon={faSearch} className='text-white'/>
 
       <Input 
