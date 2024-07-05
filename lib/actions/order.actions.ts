@@ -1,11 +1,11 @@
 "use server";
 
 import QRCode from 'qrcode'
-const Mailgen = require('mailgen')
 
-import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+
+
+
 
 import { CheckoutOrderParams, CreateOrderParams } from "@/types";
 import { redirect } from "next/navigation";
@@ -78,48 +78,19 @@ export const sendEmail = async ({
   event:IEvent;
   userId:string
 }) => {
-  // resend.emails.send({
-  //     from: 'Swarasthi Events <onboarding@resend.dev>',
-  //     to:userEmail,
-  //     subject:'Swarasthi events presents you',
-  //     text:`We'll see you at ${eventTitle} your bill is Rs${totalAmount}`
-  // })
+  
 
 
   const qrData = JSON.stringify({
     eventId: event._id,
     buyerId: userId,
     eventTitle: event.title,
-    price: totalAmount // Convert from cents to dollars
+    price: totalAmount 
   });
 
   const qrCodeUrl = await QRCode.toDataURL(qrData);
 
-  // const MailGenerator = new Mailgen({
-  //   theme: 'default',
-  //   product: {
-  //     name: 'Mailgen',
-  //     link: 'https://mailgen.js/',
-  //   },
-  // });
-
-  // const emailResponse = {
-  //   body: {
-  //     name: userEmail,
-  //     intro: 'Thank you for your order! Here is your QR code for the event.',
-  //     table: {
-  //       data: [
-  //         {
-  //           item: event.title,
-  //           description: 'Event ticket',
-  //           price: `$${totalAmount}`, // Convert from cents to dollars
-  //         },
-  //       ],
-  //     },
-  //     outro: 'We look forward to seeing you at the event!',
-  //   },
-  // };
-  // const mailContent = MailGenerator.generate(emailResponse);
+  
 
 
   transporter.sendMail({
