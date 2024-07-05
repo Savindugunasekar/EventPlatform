@@ -16,3 +16,4 @@ export const transporter = nodemailer.createTransport({
   logger: true
 });
 
+//now work
