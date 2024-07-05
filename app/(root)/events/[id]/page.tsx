@@ -23,6 +23,7 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
   const [event, setEvent] = useState<IEvent | null>(null);
   const { user } = useUser();
   const userId = user?.publicMetadata.userId as string;
+  const userEmail = user?.publicMetadata.useremail as string;
 
   const [numTickets, setNumTickets] = useState<{ [key: string]: number }>({});
   const [totalAmount, setTotalAmount] = useState<string>('0.00');
@@ -183,7 +184,7 @@ const EventDetails: React.FC<SearchParamProps> = ({ params: { id } }) => {
                     </tbody>
                   </table>
                   <div>
-                    <StripeForm event={event} userId={userId} totalAmount={totalAmount} purchasedTickets={purchasedTickets} />
+                    <StripeForm event={event} userEmail={userEmail} userId={userId} totalAmount={totalAmount} purchasedTickets={purchasedTickets} />
                   </div>
                 </div>
               </div>

@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { Button } from '../ui/button';
 
 import { loadStripe } from '@stripe/stripe-js';
-import { checkoutOrder } from '@/lib/actions/order.actions';
+import { checkoutOrder, sendEmail } from '@/lib/actions/order.actions';
 import { boughtTicket } from '@/app/(root)/events/[id]/page';
 import { changeTickets } from '@/lib/actions/event.actions';
 
@@ -14,7 +14,7 @@ loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
-const StripeForm = ({event,userId,totalAmount,purchasedTickets}:{event:IEvent,userId:string,totalAmount:string,purchasedTickets:boughtTicket[]}) => {
+const StripeForm = ({event,userId,totalAmount,purchasedTickets,userEmail}:{event:IEvent,userId:string,totalAmount:string,userEmail:string ,purchasedTickets:boughtTicket[]}) => {
 
     useEffect(() => {
         // Check to see if this is a redirect back from Checkout
@@ -32,7 +32,8 @@ const StripeForm = ({event,userId,totalAmount,purchasedTickets}:{event:IEvent,us
 
 
 
-
+      
+      
 
 
     const onCheckout = async ()=>{
@@ -47,6 +48,8 @@ const StripeForm = ({event,userId,totalAmount,purchasedTickets}:{event:IEvent,us
         await checkoutOrder(order)
 
         await changeTickets({event,purchasedTickets})
+
+        await sendEmail({userEmail,totalAmount,event,userId})
         
 
     }

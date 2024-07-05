@@ -1,7 +1,9 @@
+
 import Collection from "@/components/shared/Collection";
 import ImageSlider from "@/components/shared/ImageSlider";
 import Search from "@/components/shared/Search";
 import { getAllEvents } from "@/lib/actions/event.actions";
+import { sendEmail } from "@/lib/actions/order.actions";
 import { SearchParamProps } from "@/types";
 
 export default async function Home({ searchParams }: SearchParamProps) {
@@ -18,10 +20,14 @@ export default async function Home({ searchParams }: SearchParamProps) {
     <>
       
         <ImageSlider />
+
+
+        
       
 
       <section className="sm:w-[600px] md:w-[800px]  mt-[100px]  ">
         <h2 className="h2-bold  text-white mb-5 ">Trusted by Thousands of Events</h2>
+        
 
         <Search />
       </section>
