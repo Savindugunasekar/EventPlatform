@@ -55,7 +55,7 @@ const SliderComponent = ({ currentEvent }: SliderComponentProps) => {
   </div>
  */}
 
-  <div className="h-[80vh] w-full relative ">
+  <div className="h-[90vh] w-full relative ">
     <img className="h-full w-full object-cover " src={currentEvent.imageUrl} alt="" />
     <div className="bg-gradient-to-r from-[#0e0e0e] to-none absolute top-0 h-full w-full opacity-90">
     <div className="absolute sm:bottom-2 md:bottom-1/4 lg:top-1/4">

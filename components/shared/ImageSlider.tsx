@@ -58,7 +58,7 @@ const ImageSlider = () => {
     const currentEvent = events.length > 0 ? events[currIndex] : null;
 
     return (
-        <div className=' h-[80vh] relative group'>
+        <div className=' relative group'>
             {currentEvent && <SliderComponent currentEvent={currentEvent}  />}
 
 

@@ -27,7 +27,7 @@ const Collection = ({
   return (
     <>
       {data.length > 0 ? (
-        <div className="flex mx-5 flex-col 
+        <div className="flex mx-20 flex-col 
          items-center gap-y-10">
           <ul className="grid  w-full grid-cols-1 sm:gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:gap-10">
             {data.map((event) => {

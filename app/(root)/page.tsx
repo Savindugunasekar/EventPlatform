@@ -25,7 +25,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
         
       
 
-      <section className="sm:w-[600px] md:w-[800px]  mt-[100px]  ">
+      <section className="sm:w-[600px] md:w-[1000px] px-20 mb-20 mt-[100px]  ">
         <h2 className="h2-bold  text-white mb-5 ">Trusted by Thousands of Events</h2>
         
 
