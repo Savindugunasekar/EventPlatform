@@ -111,34 +111,51 @@ export const sendEmail = async ({
   
 
 
-  transporter.sendMail({
-    from: process.env.MYEMAIL,
-    to: userEmail,
-    subject: 'Your Order QR Code',
-    html: `
-      <html>
-      <body style="font-family: Arial, sans-serif; color: #333;">
-        <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
-          <h2 style="color: #0056b3;">Your Order QR Code</h2>
-          <p style="font-size: 16px;">Hello,</p>
-          <p style="font-size: 16px;">We'll see you at <strong>${event.title}</strong>. Your bill is <strong>Rs${totalAmount}</strong>.</p>
-          <p style="font-size: 16px;">Attached is your QR code for the event:</p>
-          <div style="text-align: center; margin: 20px 0;">
-            <img src="cid:qr-code" alt="QR Code" style="max-width: 200px; border: 1px solid #ddd; border-radius: 4px;" />
-          </div>
-          <p style="font-size: 16px;">Thank you for your order!</p>
-          <p style="font-size: 14px; color: #777;">If you have any questions, feel free to reach out to us.</p>
+ transporter.sendMail({
+  from: process.env.MYEMAIL,
+  to: userEmail,
+  subject: 'Your Order QR Code',
+  html: `
+    <html>
+    <body style="font-family: Arial, sans-serif; color: #333;">
+      <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+        <h2 style="color: #0056b3;">Your Order QR Code</h2>
+        <p style="font-size: 16px;">Hello,</p>
+        <p style="font-size: 16px;">We'll see you at <strong>${event.title}</strong>. Your bill is <strong>Rs${totalAmount}</strong>.</p>
+        <p style="font-size: 16px;">Attached is your QR code for the event:</p>
+        <div style="text-align: center; margin: 20px 0;">
+          <img src="cid:qr-code" alt="QR Code" style="max-width: 200px; border: 1px solid #ddd; border-radius: 4px;" />
         </div>
-      </body>
-      </html>
-    `,
-    attachments: [
-      {
-        filename: 'qr-code.png',
-        path: qrCodeUrl, // Ensure the QR code URL is accessible
-        cid: 'qr-code' // Content ID for embedding the image in the HTML
-      }
-    ],
-  });
-  
+        <p style="font-size: 16px;">Thank you for your order!</p>
+        <p style="font-size: 14px; color: #777;">If you have any questions, feel free to reach out to us.</p>
+      </div>
+    </body>
+    </html>
+  `,
+  attachments: [
+    {
+      filename: 'qr-code.png',
+        content: qrCodeUrl.split('base64,')[1],
+        encoding: 'base64',
+    }
+  ],
+});
+
+
 };
+
+
+// transporter.sendMail({
+//   from: process.env.MYEMAIL,
+//   to: userEmail,
+//   subject: 'Your Order QR Code',
+//     text: `We'll see you at ${event.title} your bill is Rs${totalAmount}`,
+//     attachments: [
+//       {
+//         filename: 'qr-code.png',
+//         content: qrCodeUrl.split('base64,')[1],
+//         encoding: 'base64',
+//       },
+//     ],
+// });
+// };
