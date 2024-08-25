@@ -291,7 +291,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
         </form>
       </Form>
 
-      <section className="mt-10">
+      <div className="mt-10">
         <h2 className="h3-bold mb-5 text-white">Add Tickets</h2>
         <Button className="rounded-full p-5" onClick={handleClick}>Add</Button>
         <form onSubmit={submitTickets}>
@@ -326,13 +326,13 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                </div>
              ))}
              </form>
-           </section>
+           </div>
      
-           <section className="mt-[50px]">
+           <div className="mt-[50px]">
              <Button className="button col-span-2 w-full" onClick={submitAll}>
                {type === 'Create' ? 'Create Event' : 'Update Event'}
              </Button>
-           </section>
+           </div>
          </>
        );
      };

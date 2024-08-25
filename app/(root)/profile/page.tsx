@@ -30,7 +30,7 @@ const ProfilePage =async ({searchParams}:SearchParamProps) => {
 
     {/* My Tickets */}
 
-    <section className="bg-[#333]  bg-cover bg-center py-5 md:py-10">
+    <div className="bg-[#333]  bg-cover bg-center py-5 md:py-10">
         <div className="wrapper flex items-center justify-center sm:justify-between">
           <h3 className="h3-bold text-center sm:text-left text-white">My Tickets</h3>
 
@@ -38,10 +38,10 @@ const ProfilePage =async ({searchParams}:SearchParamProps) => {
             <Link href="/#events">Explore More Events</Link>
           </Button>
         </div>
-      </section>
+      </div>
 
 
-      <section className="wrapper my-8">
+      <div className="wrapper my-8">
         <Collection
           data={orderedEvents}
           emptyTitle="No event tickets purchased yet "
@@ -52,11 +52,11 @@ const ProfilePage =async ({searchParams}:SearchParamProps) => {
           totalPages={orders?.totalPages}
           urlParamName="ordersPage"
         />
-      </section>
+      </div>
 
     {/* events organized */}
 
-    <section className="bg-[#333] bg-cover bg-center py-5 md:py-10 mb-20">
+    <div className="bg-[#333] bg-cover bg-center py-5 md:py-10 mb-20">
         <div className="wrapper flex items-center justify-center sm:justify-between">
           <h3 className="h3-bold text-center sm:text-left text-white">Events organized</h3>
 
@@ -64,9 +64,9 @@ const ProfilePage =async ({searchParams}:SearchParamProps) => {
             <Link href="/events/create">Create New Event</Link>
           </Button>
         </div>
-      </section>
+      </div>
 
-      <section >
+      <div >
         <Collection
           data={organizedEvents?.data}
           emptyTitle="No events have been created yet"
@@ -77,7 +77,7 @@ const ProfilePage =async ({searchParams}:SearchParamProps) => {
           totalPages={organizedEvents?.totalPages}
           urlParamName="eventsPage"
         />
-      </section>
+      </div>
 
 
 
